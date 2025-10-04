@@ -1,0 +1,63 @@
+services:
+  # === Classic Jenkins LTS ===
+  jenkins-lts:
+    image: jenkins/jenkins:lts
+    container_name: jenkins-lts
+    ports:
+      - "8081:8080"      # mapped to host port 8081
+      - "50001:50000"    # mapped to host port 50001
+    volumes:
+      - jenkins_lts_home:/var/jenkins_home
+    environment:
+      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
+    networks:
+      - jenkins_network
+
+  # === Docker-in-Docker Daemon for BlueOcean ===
+  dind:
+    image: docker:dind
+    container_name: jenkins-docker
+    privileged: true
+    networks:
+      jenkins_network:
+        aliases:
+          - docker
+    environment:
+      DOCKER_TLS_CERTDIR: /certs
+    volumes:
+      - jenkins-docker-certs:/certs/client
+      - jenkins-blueocean-data:/var/jenkins_home
+    ports:
+      - "2376:2376"
+    command: ["--storage-driver", "overlay2"]
+    restart: unless-stopped
+
+  # === Jenkins BlueOcean with Docker integration ===
+  jenkins-blueocean:
+    build:
+      context: .         # place your Dockerfile here
+      dockerfile: DockerFileJenkins
+    container_name: jenkins-blueocean
+    networks:
+      - jenkins_network
+    environment:
+      DOCKER_HOST: tcp://docker:2376
+      DOCKER_CERT_PATH: /certs/client
+      DOCKER_TLS_VERIFY: "1"
+    volumes:
+      - jenkins-blueocean-data:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client:ro
+    ports:
+      - "8080:8080"      # mapped to host port 8080
+      - "50000:50000"    # mapped to host port 50000
+    restart: on-failure
+
+volumes:
+  jenkins_lts_home:
+  jenkins-blueocean-data:
+  jenkins-docker-certs:
+
+networks:
+  jenkins_network:
+    driver: bridge
+

@@ -1,0 +1,67 @@
+services:
+  # === Docker-in-Docker Daemon for BlueOcean ===
+  dind:
+    image: docker:dind
+    container_name: jenkins-docker
+    privileged: true
+    networks:
+      jenkins_network:
+        aliases:
+          - docker
+    environment:
+      DOCKER_TLS_CERTDIR: /certs
+    volumes:
+      - jenkins-docker-certs:/certs/client
+      - jenkins-blueocean-data:/var/jenkins_home
+    ports:
+      - "2376:2376"
+    command: ["--storage-driver", "overlay2"]
+    restart: unless-stopped
+
+  # === Jenkins BlueOcean with Docker integration ===
+  jenkins-blueocean:
+    build:
+      context: .         # place your Dockerfile here
+      dockerfile: DockerFileJenkins
+    container_name: jenkins-blueocean
+    networks:
+      - jenkins_network
+    environment:
+      DOCKER_HOST: tcp://docker:2376
+      DOCKER_CERT_PATH: /certs/client
+      DOCKER_TLS_VERIFY: "1"
+      JENKINS_OPTS: "--httpPort=8081 --httpListenAddress=0.0.0.0"
+    volumes:
+      - jenkins-blueocean-data:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client:ro
+    ports:
+      - "8081:8081"      # Jenkins runs on port 8081 internally
+      - "50000:50000"    # mapped to host port 50000
+    restart: on-failure
+
+  # === Jenkins Slave Node ===
+  jenkins-slave:
+    image: jenkins/inbound-agent:latest
+    container_name: jenkins-slave
+    networks:
+      - jenkins_network
+    environment:
+      JENKINS_URL: http://jenkins-blueocean:8081
+      JENKINS_AGENT_NAME: slave-node
+      JENKINS_AGENT_WORKDIR: /home/jenkins/agent
+    volumes:
+      - jenkins-slave-data:/home/jenkins/agent
+      - /var/run/docker.sock:/var/run/docker.sock  # For Docker-in-Docker support
+    depends_on:
+      - jenkins-blueocean
+    restart: unless-stopped
+
+volumes:
+  jenkins-blueocean-data:
+  jenkins-docker-certs:
+  jenkins-slave-data:
+
+networks:
+  jenkins_network:
+    driver: bridge
+

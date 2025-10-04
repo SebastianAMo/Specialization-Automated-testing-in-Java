@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="SmokeTestSuite" verbose="1" parallel="classes" thread-count="3">
+    
+    <!-- Default test configuration with Chrome browser -->
+    <test name="ChromeTests">
+        <parameter name="environment" value="prod"/>
+        <parameter name="browser" value="chrome"/>
+        <parameter name="headless" value="false"/>
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="org.automationexercise.tests.DeleteUserTest"/>
+            <class name="org.automationexercise.tests.LoginTest"/>
+            <class name="org.automationexercise.tests.ProductsCartTest"/>
+        </classes>
+    </test>
+</suite>
