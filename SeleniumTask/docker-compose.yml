@@ -21,7 +21,7 @@ services:
   # === Jenkins BlueOcean with Docker integration ===
   jenkins-blueocean:
     build:
-      context: .         # place your Dockerfile here
+      context: .
       dockerfile: DockerFileJenkins
     container_name: jenkins-blueocean
     networks:
@@ -35,8 +35,8 @@ services:
       - jenkins-blueocean-data:/var/jenkins_home
       - jenkins-docker-certs:/certs/client:ro
     ports:
-      - "8081:8081"      # Jenkins runs on port 8081 internally
-      - "50000:50000"    # mapped to host port 50000
+      - "8081:8081"
+      - "50000:50000"
     restart: on-failure
 
   # === Jenkins Slave Node ===
@@ -49,12 +49,13 @@ services:
       JENKINS_URL: http://jenkins-blueocean:8081
       JENKINS_AGENT_NAME: slave-node
       JENKINS_AGENT_WORKDIR: /home/jenkins/agent
+      JENKINS_SECRET: ${JENKINS_SECRET} # This is the secret key for the Jenkins slave node, Generate it in the Jenkins UI
     volumes:
       - jenkins-slave-data:/home/jenkins/agent
-      - /var/run/docker.sock:/var/run/docker.sock  # For Docker-in-Docker support
+      - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - jenkins-blueocean
-    restart: unless-stopped
+
 
 volumes:
   jenkins-blueocean-data:
