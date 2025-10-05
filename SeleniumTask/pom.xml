@@ -53,6 +53,22 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- ReportPortal TestNG agent -->
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>agent-java-testng</artifactId>
+            <version>5.6.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Optional: ReportPortal logback logger -->
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>logger-java-logback</artifactId>
+            <version>5.2.2</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
