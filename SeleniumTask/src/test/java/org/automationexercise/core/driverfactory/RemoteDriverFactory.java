@@ -26,6 +26,7 @@ public class RemoteDriverFactory implements DriverFactory {
         try {
             return new RemoteWebDriver(new URL(gridUrl), capabilities);
         } catch (MalformedURLException e) {
+            logger.error("Invalid Grid URL: " + gridUrl, e);
             throw new RuntimeException("Invalid Grid URL: " + gridUrl, e);
         }
 

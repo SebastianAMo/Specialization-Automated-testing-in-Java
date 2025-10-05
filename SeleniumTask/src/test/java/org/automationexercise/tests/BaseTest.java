@@ -6,12 +6,7 @@ import org.automationexercise.utils.ConfigLoader;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Listeners;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
-
+import org.testng.annotations.*;
 import io.qameta.allure.testng.AllureTestNg;
 
 
@@ -28,7 +23,7 @@ public abstract class BaseTest {
         ConfigLoader configLoader = ConfigLoader.getInstance();
         configLoader.setEnvironment(environment);
         
-        boolean isHeadless = Boolean.parseBoolean(headless);
+        boolean isHeadless = headless.equalsIgnoreCase("true");
         
         DriverInstance driverInstance = DriverInstance.getInstance();
         driverInstance.initDriver(isHeadless, browser);
