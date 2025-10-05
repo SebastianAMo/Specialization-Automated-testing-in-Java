@@ -41,6 +41,7 @@ public class DriverInstance {
             String remoteBrowser = System.getProperty("remoteBrowser", System.getenv().getOrDefault("REMOTE_BROWSER", "chrome"));
             String gridUrl = System.getProperty("gridUrl", System.getenv().getOrDefault("GRID_URL", "http://localhost:4444/wd/hub"));
 
+            logger.info("Remote browser: {} and grid URL: {}", remoteBrowser, gridUrl);
             MutableCapabilities capabilities;
             if ("chrome".equalsIgnoreCase(remoteBrowser)) {
                 ChromeOptions options = new ChromeOptions();
