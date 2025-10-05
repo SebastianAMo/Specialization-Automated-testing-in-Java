@@ -45,9 +45,14 @@ public class DriverInstance {
 
     public void quitDriver() {
         if (driver.get() != null) {
-            driver.get().quit();
-            driver.remove();
-            logger.info("Driver quit successfully");
+            try {
+                driver.get().quit();
+                logger.info("Driver quit successfully");
+            } catch (Exception e) {
+                logger.warn("Error during driver quit: {}", e.getMessage());
+            } finally {
+                driver.remove();
+            }
         } else {
             logger.warn("No driver instance to quit");
         }
