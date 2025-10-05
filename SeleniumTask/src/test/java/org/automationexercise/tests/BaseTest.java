@@ -6,7 +6,12 @@ import org.automationexercise.utils.ConfigLoader;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
+
 import io.qameta.allure.testng.AllureTestNg;
 
 
@@ -18,7 +23,7 @@ public abstract class BaseTest {
 
     @BeforeMethod(alwaysRun = true)
     @Parameters({"browser", "headless", "environment"})
-    public void setUp(@Optional("chrome") String browser, @Optional("false") String headless, @Optional("dev") String environment) {
+    public void setUp(@Optional("chrome") String browser, @Optional("true") String headless, @Optional("dev") String environment) {
         // Set environment before initializing driver
         ConfigLoader configLoader = ConfigLoader.getInstance();
         configLoader.setEnvironment(environment);
