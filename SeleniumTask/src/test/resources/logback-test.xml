@@ -40,7 +40,7 @@
     </root>
 
     <!-- Package-specific logging levels -->
-    <logger name="org.automationexercise" level="DEBUG"/>
+    <logger name="org.automationexercise" level="INFO"/>
     <logger name="org.openqa.selenium" level="WARN"/>
     <logger name="io.github.bonigarcia.wdm" level="WARN"/>
 </configuration>
