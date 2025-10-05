@@ -14,7 +14,7 @@ public class ChromeDriverFactory implements DriverFactory {
     public WebDriver createDriver(boolean headless) {
         ChromeOptions options = new ChromeOptions();
         if (headless) {
-            options.addArguments("--headless", "--disable-gpu", "--no-sandbox", "--disable-dev-shm-usage");
+            options.addArguments("--headless=new", "--disable-gpu", "--no-sandbox", "--disable-dev-shm-usage");
             logger.debug("Added headless arguments for Chrome");
         }
         WebDriverManager.chromedriver().setup();
