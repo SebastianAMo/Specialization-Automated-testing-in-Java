@@ -7,8 +7,6 @@
         <parameter name="environment" value="prod"/>
         <parameter name="browser" value="chrome"/>
         <parameter name="headless" value="true"/>
-        <parameter name="remote" value="true"/>
-        <parameter name="gridUrl" value="http://selenium-hub:4444/wd/hub"/>
         <groups>
             <run>
                 <include name="smoke"/>
@@ -17,7 +15,7 @@
         <classes>
             <class name="org.automationexercise.tests.DeleteUserTest"/>
             <class name="org.automationexercise.tests.LoginTest"/>
-            <!-- <class name="org.automationexercise.tests.ProductsCartTest"/> -->
+            <class name="org.automationexercise.tests.ProductsCartTest"/>
         </classes>
     </test>
 </suite>
