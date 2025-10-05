@@ -61,11 +61,10 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Optional: ReportPortal logback logger -->
         <dependency>
             <groupId>com.epam.reportportal</groupId>
             <artifactId>logger-java-logback</artifactId>
-            <version>5.2.2</version>
+            <version>5.4.0</version>
             <scope>test</scope>
         </dependency>
 

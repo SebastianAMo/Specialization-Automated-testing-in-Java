@@ -34,7 +34,11 @@
     </appender>
 
     <!-- ReportPortal appender to forward logs to ReportPortal -->
-    <appender name="REPORTPORTAL" class="com.epam.reportportal.logback.appender.ReportPortalAppender"/>
+    <appender name="ReportPortalAppender" class="com.epam.reportportal.logback.appender.ReportPortalAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>
 
     <!-- Root logger configuration -->
     <root level="INFO">
@@ -44,7 +48,7 @@
     </root>
 
     <!-- Package-specific logging levels -->
-    <logger name="org.automationexercise" level="INFO"/>
+    <logger name="org.automationexercise" level="DEBUG"/>
     <logger name="org.openqa.selenium" level="WARN"/>
     <logger name="io.github.bonigarcia.wdm" level="WARN"/>
 </configuration>
