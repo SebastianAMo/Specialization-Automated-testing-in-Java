@@ -22,16 +22,18 @@ public abstract class BaseTest {
     protected WebDriver driver;
 
     @BeforeMethod(alwaysRun = true)
-    @Parameters({"browser", "headless", "environment"})
-    public void setUp(@Optional("chrome") String browser, @Optional("true") String headless, @Optional("dev") String environment) {
+    @Parameters({"browser", "headless", "environment", "remote", "gridUrl"})
+    public void setUp(@Optional("chrome") String browser, @Optional("true") String headless, @Optional("dev") String environment, 
+                     @Optional("false") String remote, @Optional("") String gridUrl) {
         // Set environment before initializing driver
         ConfigLoader configLoader = ConfigLoader.getInstance();
         configLoader.setEnvironment(environment);
         
         boolean isHeadless = Boolean.parseBoolean(headless);
+        boolean isRemote = Boolean.parseBoolean(remote);
         
         DriverInstance driverInstance = DriverInstance.getInstance();
-        driverInstance.initDriver(isHeadless, browser);
+        driverInstance.initDriver(isHeadless, browser, isRemote, gridUrl);
         driver = driverInstance.getDriver();
 
         driver.get(configLoader.getProperty("base.url"));

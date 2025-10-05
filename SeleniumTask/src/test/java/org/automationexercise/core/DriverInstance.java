@@ -27,9 +27,25 @@ public class DriverInstance {
     }
 
     public void initDriver(boolean headless, String browser) {
+        initDriver(headless, browser, false, null);
+    }
+
+    public void initDriver(boolean headless, String browser, boolean remote, String gridUrl) {
         if (driver.get() == null) {
-            logger.info("Starting driver initialization for browser: {} with headless: {}", browser, headless);
-            DriverFactory factory = DriverFactoryProducer.getFactory(browser);
+            logger.info("Starting driver initialization for browser: {} with headless: {} and remote: {}", browser, headless, remote);
+            
+            DriverFactory factory;
+            if (remote && gridUrl != null) {
+                // Create Chrome capabilities for remote execution
+                org.openqa.selenium.chrome.ChromeOptions chromeOptions = new org.openqa.selenium.chrome.ChromeOptions();
+                if (headless) {
+                    chromeOptions.addArguments("--headless", "--disable-gpu", "--no-sandbox", "--disable-dev-shm-usage");
+                }
+                factory = DriverFactoryProducer.getFactory("remote", gridUrl, chromeOptions);
+            } else {
+                factory = DriverFactoryProducer.getFactory(browser);
+            }
+            
             driver.set(factory.createDriver(headless));
             driver.get().manage().window().maximize();
 
