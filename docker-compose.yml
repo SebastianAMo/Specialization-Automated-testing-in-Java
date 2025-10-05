@@ -64,6 +64,8 @@ services:
       - "4444:4444"
       - "4442:4442"
       - "4443:4443"
+    networks:
+      - jenkins_network
 
   chrome:
     image: selenium/node-chrome:latest
@@ -77,6 +79,8 @@ services:
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
       - VNC_NO_PASSWORD=1
       - SE_NODE_MAX_SESSIONS=5
+    networks:
+      - jenkins_network
 
 
 volumes:
