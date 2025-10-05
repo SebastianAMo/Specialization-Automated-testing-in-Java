@@ -33,10 +33,14 @@
         </encoder>
     </appender>
 
+    <!-- ReportPortal appender to forward logs to ReportPortal -->
+    <appender name="REPORTPORTAL" class="com.epam.reportportal.logback.appender.ReportPortalAppender"/>
+
     <!-- Root logger configuration -->
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY_FILE"/>
+        <appender-ref ref="REPORTPORTAL"/>
     </root>
 
     <!-- Package-specific logging levels -->
