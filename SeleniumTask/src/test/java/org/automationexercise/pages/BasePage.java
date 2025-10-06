@@ -2,6 +2,7 @@ package org.automationexercise.pages;
 
 import org.automationexercise.decorators.LoggingHighlightWebElement;
 import org.automationexercise.pages.components.NavigationBar;
+import org.automationexercise.utils.ScreenshotUtil;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+import java.util.Base64;
 
 
 
@@ -62,16 +64,56 @@ public abstract class BasePage {
     public void clickElementShortWait(WebElement element) {
         WebElement clickableElement = new LoggingHighlightWebElement(shortWait.until(ExpectedConditions.elementToBeClickable(element)), driver);
         clickableElement.click();
+        captureClickScreenshot("click_element");
     }
 
     public void clickElementShortWait(By locator) {
         WebElement element = driver.findElement(locator);
         new LoggingHighlightWebElement(shortWait.until(ExpectedConditions.elementToBeClickable(element)), driver).click();
+        captureClickScreenshot("click_element_by_locator");
     }
 
     public void sendKeysToElementShortWait(By locator, String text) {
         WebElement element = new LoggingHighlightWebElement(shortWait.until(ExpectedConditions.elementToBeClickable(locator)), driver);
         element.clear();
         element.sendKeys(text);
+    }
+
+    /**
+     * Captures a screenshot after clicking an element and logs it to ReportPortal
+     * @param actionDescription Description of the click action for logging
+     */
+    private void captureClickScreenshot(String actionDescription) {
+        try {
+            ScreenshotUtil.ScreenshotResult screenshotResult = ScreenshotUtil.takeScreenshotWithBinary(
+                driver, actionDescription + "_" + System.currentTimeMillis(), "screenshots/clicks/");
+            
+            if (screenshotResult.getBinaryData() != null) {
+                String base64Screenshot = Base64.getEncoder().encodeToString(screenshotResult.getBinaryData());
+                logger.info("RP_MESSAGE#BASE64#{}#Click action: {}", 
+                    base64Screenshot, actionDescription);
+            }
+        } catch (Exception e) {
+            logger.warn("Failed to capture click screenshot: {}", e.getMessage());
+        }
+    }
+
+    /**
+     * Public method to capture step screenshots that can be called from page objects
+     * @param stepDescription Description of the step being captured
+     */
+    public void captureStepScreenshot(String stepDescription) {
+        try {
+            ScreenshotUtil.ScreenshotResult screenshotResult = ScreenshotUtil.takeScreenshotWithBinary(
+                driver, "step_" + System.currentTimeMillis(), "screenshots/steps/");
+            
+            if (screenshotResult.getBinaryData() != null) {
+                String base64Screenshot = Base64.getEncoder().encodeToString(screenshotResult.getBinaryData());
+                logger.info("RP_MESSAGE#BASE64#{}#Step: {}", 
+                    base64Screenshot, stepDescription);
+            }
+        } catch (Exception e) {
+            logger.warn("Failed to capture step screenshot: {}", e.getMessage());
+        }
     }
 }
