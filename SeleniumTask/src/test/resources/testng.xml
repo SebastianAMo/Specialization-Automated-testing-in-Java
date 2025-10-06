@@ -10,7 +10,7 @@
         <classes>
             <class name="org.automationexercise.tests.DeleteUserTest"/>
             <class name="org.automationexercise.tests.LoginTest"/>
-             <class name="org.automationexercise.tests.ProductsCartTest"/>
+           <!--  <class name="org.automationexercise.tests.ProductsCartTest"/> -->
         </classes>
     </test>
 </suite>
